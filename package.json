@@ -1,0 +1,24 @@
+{
+  "name": "telegram-conference-slides-uploader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api/telegram.js",
+  "scripts": {
+    "test": "jest --env=node ./test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.219.1",
+    "axios": "^0.19.2",
+    "googleapis": "^82.0.0",
+    "telegraf": "^3.38.0",
+    "uuid": "^2.0.3"
+  },
+  "devDependencies": {
+    "jest": "^26.0.1",
+    "serverless-offline": "^6.4.0",
+    "telegram-test-api": "^2.4.2"
+  }
+}

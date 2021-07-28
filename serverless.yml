@@ -1,0 +1,43 @@
+service: telegram-notify-bot-serverless
+
+plugins:
+  - serverless-offline
+#  - serverless-dotenv-plugin
+#  - serverless-yandex-cloud
+
+custom:
+  config: ${file(.env.yml):${opt:stage, self:provider.stage}}
+
+provider:
+  name: aws
+#  name: yandex-cloud
+  runtime: nodejs12.x
+  stage: prod
+  region: us-east-1
+  memorySize: 128
+  timeout: 10
+  endpointType: regional
+  environment:
+    conference_days: ${self:custom.config.conference_days}
+    conference_halls: ${self:custom.config.conference_halls}
+    bot_token: ${self:custom.config.bot_token}
+    google_client_email: ${self:custom.config.google_client_email}
+    google_private_key: ${self:custom.config.google_private_key}
+    drive_folder_id: ${self:custom.config.drive_folder_id}
+functions:
+  telegramEventHandler:
+    handler: api/telegram.eventHandler
+    description: Handle events from telegram
+    events:
+      - http:
+          path: webhook
+          method: post
+          cors: true
+  telegramSetWebhook:
+    handler: api/telegram.setWebhook
+    description: Set webhook in telegram servers
+    events:
+      - http:
+          path: setWebhook
+          method: post
+          cors: true
