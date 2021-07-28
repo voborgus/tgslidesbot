@@ -1,6 +1,6 @@
 # Telegram Conference Slides Uploader
 
-A serverless telegram bot receives slides from speaker and uploads to Google Drive.
+A serverless telegram bot receives slides from the speaker and uploads them to Google Drive.
 
 ## Frameworks Used
 + [Serverless Framework](https://www.serverless.com/framework/docs/getting-started/)
@@ -10,6 +10,7 @@ A serverless telegram bot receives slides from speaker and uploads to Google Dri
 + AWS or Yandex Cloud credentials [configured](https://serverless.com/framework/docs/providers/aws/guide/credentials/).
 + [NodeJS](https://nodejs.org/) 12.x.
 + A [Telegram](https://telegram.org/) account.
++ Google Drive Account.
 
 ![Screencast](./docs/conference-bot.gif)
 
