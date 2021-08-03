@@ -13,10 +13,6 @@ A serverless telegram bot receives slides from the speaker and uploads them to t
 
 ![Screencast](./docs/conference-bot.gif)
 
-## Limitations
-
-**According to current Telegram Bots limits, the bot can work only with files less than 20mb.**
-
 ## Installation
 
 + Install the Serverless Framework
