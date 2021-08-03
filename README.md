@@ -1,5 +1,7 @@
 # tgslidesbot – Telegram Slides Bot
-A serverless telegram bot receives slides from the speaker and uploads them to the Google Drive.
+A JS serverless telegram bot receives slides from the speaker and uploads them to the Google Drive.
+
+![Screencast](./docs/demo.gif)
 
 ## Frameworks Used
 + [Serverless Framework](https://www.serverless.com/framework/docs/getting-started/)
@@ -11,7 +13,6 @@ A serverless telegram bot receives slides from the speaker and uploads them to t
 + A [Telegram](https://telegram.org/) account.
 + Google Drive Account.
 
-![Screencast](./docs/conference-bot.gif)
 
 ## Installation
 
