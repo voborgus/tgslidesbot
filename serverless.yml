@@ -1,4 +1,4 @@
-service: telegram-notify-bot-serverless
+service: tgslidesbot
 
 plugins:
   - serverless-offline
@@ -15,7 +15,7 @@ provider:
   stage: prod
   region: us-east-1
   memorySize: 128
-  timeout: 10
+  timeout: 100
   endpointType: regional
   environment:
     conference_days: ${self:custom.config.conference_days}
@@ -24,6 +24,9 @@ provider:
     google_client_email: ${self:custom.config.google_client_email}
     google_private_key: ${self:custom.config.google_private_key}
     drive_folder_id: ${self:custom.config.drive_folder_id}
+    taas_api_key: ${self:custom.config.taas_api_key}
+    slides_chat_id: ${self:custom.config.slides_chat_id}
+    direct_download: ${self:custom.config.direct_download}
 functions:
   telegramEventHandler:
     handler: api/telegram.eventHandler
@@ -34,10 +37,18 @@ functions:
           method: post
           cors: true
   telegramSetWebhook:
-    handler: api/telegram.setWebhook
+    handler: api/webHookSetter.setWebhook
     description: Set webhook in telegram servers
     events:
       - http:
           path: setWebhook
+          method: post
+          cors: true
+  bigFileUploader:
+    handler: api/bigFile.eventHandler
+    description: Uploads big files through proxy
+    events:
+      - http:
+          path: uploadBigFile
           method: post
           cors: true

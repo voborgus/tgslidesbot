@@ -37,8 +37,11 @@ const finishKeyboard = {
         one_time_keyboard: true
     }
 };
+
+const slidesChatSuccess = 'Обновил на диске.'
 module.exports = {
     startMessage, getDayKeyboard, getDayQuestion, getHallQuestion, getHallKeyboard, finishKeyboard,
     getFileQuestion, getFileKeyboard, getFileSticker, getFileFailMessage, getFileSuccessMessage,
-    isMultipleDaysConference, isMultipleHallsConference, conferenceHallsArray, conferenceDaysArray
+    isMultipleDaysConference, isMultipleHallsConference, conferenceHallsArray, conferenceDaysArray,
+    slidesChatSuccess
 };

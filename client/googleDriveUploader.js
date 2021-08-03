@@ -87,7 +87,14 @@ async function ensureFolderExists(day, hall) {
     }
 }
 
-const upload = async (fileStream, filename, mimeType, day, hall) => {
+const upload = async (fileStream, lastName, firstName, filename, mimeType, day, hall) => {
+    const username = lastName || firstName;
+    filename = username
+        + " - "
+        + new Date().toISOString().slice(5, 19).replace(/:/g, "-").replace("T", " ")
+        + "."
+        + filename.split('.').pop();
+
     await jwtClient.authorize()
     console.log("Authorized client %s. Going to upload the file.", jwtClient.email)
     const folderId = await ensureFolderExists(day, hall);
