@@ -3,8 +3,9 @@ const uploader = require('../client/googleDriveUploader');
 const constants = require('../utils/constants')
 const axios = require('axios')
 
+
 const Stage = require('telegraf/stage')
-const session = require('telegraf/session')
+const DynamoDBSession = require('telegraf-session-dynamodb')
 const Scene = require('telegraf/scenes/base')
 
 const getDay = new Scene('getDay')
@@ -16,14 +17,24 @@ stage.register(getDay)
 stage.register(getHall)
 stage.register(getFile)
 
-const bot = new Telegraf(process.env.bot_token);
-bot.use(session())
-bot.use(stage.middleware())
-bot.command('whoami', (ctx) => ctx.reply(ctx.chat.id.toString()))
+const dynamoDBSession = new DynamoDBSession({
+    dynamoDBConfig: {
+        params: {
+            TableName: process.env.dynamodb_table
+        },
+        region: process.env.region
+    }
+})
 
+const bot = new Telegraf(process.env.bot_token);
+bot.use(dynamoDBSession.middleware())
+bot.use(stage.middleware())
+
+bot.command('whoami', (ctx) => ctx.reply(ctx.chat.id.toString()))
 
 async function startLogic(ctx) {
     await ctx.reply(format(constants.startMessage, ctx.from.first_name || 'комрад'));
+    ctx.session.username = ctx.message.from.last_name || ctx.message.from.first_name;
 
     if (constants.isMultipleDaysConference) {
         await ctx.scene.enter('getDay');
@@ -106,8 +117,8 @@ getFile.on('document', async (ctx) => {
             });
     }
 
-    ctx.reply(constants.getFileSuccessMessage, constants.finishKeyboard);
-    ctx.scene.reset();
+    await ctx.reply(constants.getFileSuccessMessage, constants.finishKeyboard);
+    await ctx.scene.reset();
     return ctx.replyWithSticker(constants.getFileSticker)
 })
 
@@ -127,8 +138,7 @@ async function processDocument(ctx) {
     console.log("Uploaded file from the link");
 
     return await uploader.upload(file.data,
-        ctx.message.from.last_name,
-        ctx.message.from.first_name,
+        ctx.session.username,
         ctx.message.document.file_name,
         ctx.message.document.mime_type,
         ctx.session.day,
@@ -143,7 +153,7 @@ function format(str) {
 }
 
 module.exports = {
-    bot
+    bot, dynamoDBSession
 }
 
 

@@ -87,8 +87,7 @@ async function ensureFolderExists(day, hall) {
     }
 }
 
-const upload = async (fileStream, lastName, firstName, filename, mimeType, day, hall) => {
-    const username = lastName || firstName;
+const upload = async (fileStream, username, filename, mimeType, day, hall) => {
     filename = username
         + " - "
         + new Date().toISOString().slice(5, 19).replace(/:/g, "-").replace("T", " ")

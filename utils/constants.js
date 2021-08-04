@@ -38,10 +38,12 @@ const finishKeyboard = {
     }
 };
 
-const slidesChatSuccess = 'Обновил на диске.'
+const slidesChatSuccess = 'Обновил на диске.';
+const slidesChatReset = 'Базу данных очистил.'
+
 module.exports = {
     startMessage, getDayKeyboard, getDayQuestion, getHallQuestion, getHallKeyboard, finishKeyboard,
     getFileQuestion, getFileKeyboard, getFileSticker, getFileFailMessage, getFileSuccessMessage,
     isMultipleDaysConference, isMultipleHallsConference, conferenceHallsArray, conferenceDaysArray,
-    slidesChatSuccess
+    slidesChatSuccess, slidesChatReset
 };

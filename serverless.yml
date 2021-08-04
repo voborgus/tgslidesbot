@@ -1,13 +1,19 @@
 service: tgslidesbot
 
 plugins:
+  - serverless-dynamodb-local
   - serverless-offline
 #  - serverless-dotenv-plugin
 #  - serverless-yandex-cloud
 
 custom:
   config: ${file(.env.yml):${opt:stage, self:provider.stage}}
-
+  dynamodb:
+    stages:
+      - prod
+    start:
+      migrate: true
+      noStart: true
 provider:
   name: aws
 #  name: yandex-cloud
@@ -27,6 +33,18 @@ provider:
     taas_api_key: ${self:custom.config.taas_api_key}
     slides_chat_id: ${self:custom.config.slides_chat_id}
     direct_download: ${self:custom.config.direct_download}
+    dynamodb_table: ${self:custom.config.dynamodb_table}
+    region: ${self:provider.region}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.dynamodb_table}"
 functions:
   telegramEventHandler:
     handler: api/telegram.eventHandler
@@ -52,3 +70,22 @@ functions:
           path: uploadBigFile
           method: post
           cors: true
+resources:
+  Resources:
+    TgSlidesBot:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:custom.config.dynamodb_table}
+        AttributeDefinitions:
+          - AttributeName: SessionKey
+            AttributeType: S
+        KeySchema:
+          - AttributeName: SessionKey
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
